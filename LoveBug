@@ -1,0 +1,46 @@
+OBJECTIVE: Debug given code.
+
+#Given code
+1  tukey_multiple <- function(x) {
+2     outliers <- array(TRUE,dim=dim(x))
+3     for (j in 1:ncol(x))
+4      {
+5      outliers[,j] <- outliers[,j] && tukey.outlier(x[,j])
+6      }
+7  outlier.vec <- vector(length=nrow(x))
+8      for (i in 1:nrow(x))
+9      { outlier.vec[i] <- all(outliers[i,]) } return(outlier.vec) }
+
+#Debug code
+
+  #Bug on Line 5
+5      outliers[,j] <- outliers[,j] && tukey.outlier(x[,j])
+  #Changed to...
+5      outliers[,j] <- outliers[,j] & tukey.outlier(x[,j])
+
+  #Bug on Lines 8 and 9
+8      for (i in 1:nrow(x))
+9      { outlier.vec[i] <- all(outliers[i,]) } return(outlier.vec) }
+  #Changed to...
+8  for (i in 1:nrow(x)) { 
+9    outlier.vec[i] <- all(outliers[i, ])
+10  }
+11  return(outlier.vec) 
+12 }
+
+#New, debugged and tested, code...
+1  tukey_multiple <- function(x) {
+2     outliers <- array(TRUE,dim=dim(x))
+3     for (j in 1:ncol(x))
+4      {
+5      outliers[,j] <- outliers[,j] & tukey.outlier(x[,j])
+6      }
+7  outlier.vec <- vector(length=nrow(x))
+8      for (i in 1:nrow(x))
+9      { outlier.vec[i] <- all(outliers[i,]) } return(outlier.vec) }
+  #Changed to...
+8  for (i in 1:nrow(x)) { 
+9    outlier.vec[i] <- all(outliers[i, ])
+10  }
+11  return(outlier.vec) 
+12 }
